@@ -76,9 +76,6 @@ contract Raffle is VRFConsumerBaseV2 {
     // 3. Be automatically called
     function pickWinner() public {
         //check to see if enough time has passed
-        if ((block.timestamp - s_lastTimestamp) < i_interval) {
-            revert();
-        }
         s_raffleState = RaffleState.CALCULATING;
         uint requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
@@ -112,7 +109,9 @@ contract Raffle is VRFConsumerBaseV2 {
      * 4. The subscription is funded with LINK
      */
     function checkUpkeep(bytes memory) public view returns(bool upkeepNeeded, bytes memory){
-
+        if ((block.timestamp - s_lastTimestamp) < i_interval) {
+            revert();
+        }
     }
 
     /** Getter Functions */
