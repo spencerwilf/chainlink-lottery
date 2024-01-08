@@ -97,9 +97,10 @@ contract Raffle is VRFConsumerBaseV2 {
 
         s_players = new address payable[](0);
         s_lastTimestamp = block.timestamp;
+        emit WinnerPicked(winner);
         (bool s,) = winner.call{value: address(this).balance}("");
         require(s);
-        emit WinnerPicked(winner);
+        
     }
 
     /** Getter Functions */
