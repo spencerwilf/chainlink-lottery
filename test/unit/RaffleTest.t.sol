@@ -118,4 +118,14 @@ contract RaffleTest is Test {
 
         raffle.performUpkeep();
     }
+
+    function testPerformUpkeepCantRunIfCheckUpkeepIsFalse() public {
+
+        uint currentBalance = 0;
+        uint numPlayers = 0;
+        uint raffleState = 0;
+
+        vm.expectRevert(abi.encodeWithSelector(Raffle.Raffle__UpkeepNotNeeded.selector, currentBalance, numPlayers, raffleState));
+        raffle.performUpkeep();
+    }
 }
