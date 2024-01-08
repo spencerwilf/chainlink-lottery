@@ -36,24 +36,24 @@ contract FundSubscription is Script {
     function fundSubscriptionUsingConfig() public {
         HelperConfig helperConfig = new HelperConfig();
 
-        (,, address vrfCoordinator,,uint64 subId,,address link) = helperConfig.activeNetwork();
+        (,, address vrfCoordinator,, uint64 subId,, address link) = helperConfig.activeNetwork();
         fundSubscription(vrfCoordinator, subId, link);
     }
 
     function fundSubscription(address vrfCoordinator, uint64 subId, address link) public {
-         console.log("Funding subscription ", subId);
-         console.log("Using vrfCoordinator ", vrfCoordinator);
-         console.log("On chain id ", block.chainid);
+        console.log("Funding subscription ", subId);
+        console.log("Using vrfCoordinator ", vrfCoordinator);
+        console.log("On chain id ", block.chainid);
 
-         if (block.chainid == 31337) {
+        if (block.chainid == 31337) {
             vm.startBroadcast();
             VRFCoordinatorV2Mock(vrfCoordinator).fundSubscription(subId, FUND_AMOUNT);
             vm.stopBroadcast();
-         } else {
+        } else {
             vm.startBroadcast();
             LinkToken(link).transferAndCall(vrfCoordinator, FUND_AMOUNT, abi.encode(subId));
             vm.stopBroadcast();
-         }
+        }
     }
 
     function run() external {
