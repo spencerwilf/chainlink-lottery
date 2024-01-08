@@ -5,8 +5,5 @@ import {Script} from "forge-std/Script.sol";
 import {Raffle} from "../src/Raffle.sol";
 
 contract DeployRaffle is Script {
-
-    function run() external returns(Raffle) {
-        
-    }
+    function run() external returns (Raffle) {}
 }
