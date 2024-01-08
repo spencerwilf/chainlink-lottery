@@ -15,6 +15,7 @@ contract Raffle is VRFConsumerBaseV2 {
     
     error Raffle__NotEnoughEthSent();
     error Raffle__RaffleCurrentlyClosed();
+    error Raffle__UpkeepNotNeeded();
 
     enum RaffleState {
         OPEN,
@@ -59,7 +60,7 @@ contract Raffle is VRFConsumerBaseV2 {
         s_raffleState = RaffleState.OPEN;
     }
 
-    function enterRaffle() external payable {
+    function enterRaffle(bytes calldata) external payable {
         if (msg.value < i_entranceFee) {
             revert Raffle__NotEnoughEthSent();
         }
@@ -74,7 +75,12 @@ contract Raffle is VRFConsumerBaseV2 {
     // 1. Get random number
     // 2. Use random number to pick a player
     // 3. Be automatically called
-    function pickWinner() public {
+    function performUpkeep() public {
+        (bool upkeepNeeded,) = checkUpkeep("");
+        
+        if (!upkeepNeeded) {
+            revert Raffle__UpkeepNotNeeded();
+        }
         //check to see if enough time has passed
         s_raffleState = RaffleState.CALCULATING;
         uint requestId = i_vrfCoordinator.requestRandomWords(
