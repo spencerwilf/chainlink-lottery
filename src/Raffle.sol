@@ -109,7 +109,7 @@ contract Raffle is VRFConsumerBaseV2 {
      * 4. The subscription is funded with LINK
      */
     function checkUpkeep(bytes memory) public view returns(bool upkeepNeeded, bytes memory){
-        bool timeHasPassed = ((block.timestamp - s_lastTimestamp) > i_interval);
+        bool timeHasPassed = (block.timestamp - s_lastTimestamp) >= i_interval;
     }
 
     /** Getter Functions */
