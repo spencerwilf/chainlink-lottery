@@ -87,7 +87,7 @@ contract Raffle is VRFConsumerBaseV2 {
         }
         //check to see if enough time has passed
         s_raffleState = RaffleState.CALCULATING;
-        uint requestId = i_vrfCoordinator.requestRandomWords(
+        i_vrfCoordinator.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
             REQUEST_CONFIRMATIONS,
@@ -96,7 +96,7 @@ contract Raffle is VRFConsumerBaseV2 {
         );
     }
 
-    function fulfillRandomWords(uint requestId, uint[] memory randomWords) internal override {
+    function fulfillRandomWords(uint /* requestId */, uint[] memory randomWords) internal override {
         uint indexOfWinner = randomWords[0] % s_players.length;
         address payable winner = s_players[indexOfWinner];
         s_recentWinner = winner;
