@@ -9,11 +9,30 @@ import {Raffle} from "../../src/Raffle.sol";
 contract RaffleTest is Test {
 
     Raffle raffle;
+    HelperConfig helperConfig;
     address public PLAYER = makeAddr("player");
     uint public constant STARTING_USER_BALANCE = 10 ether;
 
+    uint256 entranceFee;
+    uint256 interval;
+    address vrfCoordinator;
+    bytes32 gasLane;
+    uint64 subscriptionId;
+    uint32 callbackGasLimit;
+
     function setUp() external {
         DeployRaffle deployer = new DeployRaffle();
-        raffle = deployer.run();
+        (raffle, helperConfig) = deployer.run();
+
+        ( entranceFee,
+         interval,
+         vrfCoordinator,
+         gasLane,
+         subscriptionId,
+         callbackGasLimit) = helperConfig.activeNetwork();
+    }
+
+    function testRaffleInitializesInOpenState() public view {
+        assert(raffle.get)
     }
 }
