@@ -114,6 +114,7 @@ contract Raffle is VRFConsumerBaseV2 {
         bool hasBalance = address(this).balance > 0;
         bool hasPlayers = s_players.length > 0;
         upkeepNeeded = (timeHasPassed && isOpen && hasBalance && hasPlayers);
+        return (upkeepNeeded, "0x0");
     }
 
     /** Getter Functions */
