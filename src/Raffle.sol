@@ -112,6 +112,7 @@ contract Raffle is VRFConsumerBaseV2 {
         bool timeHasPassed = (block.timestamp - s_lastTimestamp) >= i_interval;
         bool isOpen = RaffleState.OPEN == s_raffleState;
         bool hasBalance = address(this).balance > 0;
+        bool hasPlayers = s_players.length > 0;
     }
 
     /** Getter Functions */
