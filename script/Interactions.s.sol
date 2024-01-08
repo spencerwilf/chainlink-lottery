@@ -9,7 +9,7 @@ contract CreateSubscription is Script {
     function createSubscriptionUsingConfig() public returns (uint64) {
         HelperConfig helperConfig = new HelperConfig();
 
-        (,, address vrfCoordinator,,,) = helperConfig.activeNetwork();
+        (,, address vrfCoordinator,,,,) = helperConfig.activeNetwork();
 
         return createSubscription(vrfCoordinator);
     }
@@ -35,7 +35,7 @@ contract FundSubscription is Script {
     function fundSubscriptionUsingConfig() public {
         HelperConfig helperConfig = new HelperConfig();
 
-        (,, address vrfCoordinator,,uint64 subId,) = helperConfig.activeNetwork();
+        (,, address vrfCoordinator,,uint64 subId,,address link) = helperConfig.activeNetwork();
     }
 
     function run() external {
