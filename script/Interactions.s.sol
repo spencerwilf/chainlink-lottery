@@ -60,3 +60,8 @@ contract FundSubscription is Script {
         fundSubscriptionUsingConfig();
     }
 }
+
+
+contract AddConsumer is Script {
+    
+}
