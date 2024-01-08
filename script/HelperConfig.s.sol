@@ -41,6 +41,13 @@ contract HelperConfig is Script {
         if (activeNetwork.vrfCoordinator != address(0)) {
             return activeNetwork;
         }
+
+        uint96 baseFee = 0.25 ether;
+        uint96 gasPriceLink = 1e9;
+
+        vm.startBroadcast();
+        VRFCoordinatorV2Mock vrdCoordinatorMock = new VRFCoordinatorV2Mock(baseFee, gasPriceLink);
+        vm.stopBroadcast();
     }
 
 }
