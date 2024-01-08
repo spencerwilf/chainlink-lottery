@@ -14,8 +14,18 @@ contract HelperConfig is Script {
         uint32 callbackGasLimit;
     }
 
+    NetworkConfig public activeNetwork;
+
+    constructor() {
+        if (block.chainid == 11155111) {
+            activeNetwork = getSepoliaEthConfig();
+        } else {
+            activeNetwork = getOrCreateAnvilEthConfig();
+        }
+    }
+
     function getSepoliaEthConfig() public view returns(NetworkConfig memory) {
-        
+
         return NetworkConfig({
             entranceFee: 0.01 ether,
             interval: 30,
@@ -26,5 +36,8 @@ contract HelperConfig is Script {
         });
     }
 
+    function getOrCreateAnvilEthConfig() public returns(NetworkConfig memory) {
+
+    }
 
 }
