@@ -40,6 +40,7 @@ contract Raffle is VRFConsumerBaseV2 {
 
     /** Events */
     event EnteredRaffle(address indexed player);
+    event WinnerPicked(address indexed winner);
 
     constructor(uint entranceFee, 
                 uint interval, 
@@ -78,6 +79,7 @@ contract Raffle is VRFConsumerBaseV2 {
         if ((block.timestamp - s_lastTimestamp) < i_interval) {
             revert();
         }
+        s_raffleState = RaffleState.CALCULATING;
         uint requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
@@ -91,8 +93,13 @@ contract Raffle is VRFConsumerBaseV2 {
         uint indexOfWinner = randomWords[0] % s_players.length;
         address payable winner = s_players[indexOfWinner];
         s_recentWinner = winner;
+        s_raffleState = RaffleState.OPEN;
+
+        s_players = new address payable[](0);
+        s_lastTimestamp = block.timestamp;
         (bool s,) = winner.call{value: address(this).balance}("");
         require(s);
+        emit WinnerPicked(winner);
     }
 
     /** Getter Functions */
