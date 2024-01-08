@@ -103,6 +103,18 @@ contract Raffle is VRFConsumerBaseV2 {
         
     }
 
+    /**
+     * @dev This is the function that the Chainlink Automation nodes call to see if it's time to perform an upkeep
+     * The following should be true for this to return true:
+     * 1. The time interval has passed between raffle runs
+     * 2. the raffle is in an OPEN state
+     * 3. The contract has ETH (players)
+     * 4. The subscription is funded with LINK
+     */
+    function checkUpkeep(bytes memory) public view returns(bool upkeepNeeded, bytes memory){
+
+    }
+
     /** Getter Functions */
 
     function getEntranceFee() external view returns(uint) {
