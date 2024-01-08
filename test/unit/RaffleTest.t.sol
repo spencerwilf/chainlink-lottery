@@ -33,6 +33,6 @@ contract RaffleTest is Test {
     }
 
     function testRaffleInitializesInOpenState() public view {
-        assert(raffle.get)
+        assert(raffle.getRaffleState() == Raffle.RaffleState.OPEN);
     }
 }
