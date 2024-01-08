@@ -7,4 +7,12 @@ import {Raffle} from "../../src/Raffle.sol";
 
 contract RaffleTest is Test {
 
+    Raffle raffle;
+    address public PLAYER = makeAddr("player");
+    uint public constant STARTING_USER_BALANCE = 10 ether;
+
+    function setUp() external {
+        DeployRaffle deployer = new DeployRaffle();
+        raffle = deployer.run();
+    }
 }
