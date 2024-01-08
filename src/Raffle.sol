@@ -28,6 +28,7 @@ contract Raffle is VRFConsumerBaseV2 {
     uint64 private immutable i_subscriptionId;
     uint private immutable i_interval;
     uint32 private immutable i_callbackGasLimit;
+    address private s_recentWinner;
 
 
     /** Events */
@@ -78,6 +79,9 @@ contract Raffle is VRFConsumerBaseV2 {
     function fulfillRandomWords(uint requestId, uint[] memory randomWords) internal override {
         uint indexOfWinner = randomWords[0] % s_players.length;
         address payable winner = s_players[indexOfWinner];
+        s_recentWinner = winner;
+        (bool s,) = winner.call{value: address(this).balance}("");
+        require(s);
     }
 
     /** Getter Functions */
