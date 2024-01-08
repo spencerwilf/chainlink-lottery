@@ -70,4 +70,8 @@ contract RaffleTest is Test {
         vm.prank(PLAYER);
         raffle.enterRaffle{value: entranceFee}("");
     }
+
+    function testCheckUpkeepReturnsFalseIfItHasNoBalance() public {
+        
+    }
 }
