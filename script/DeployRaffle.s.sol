@@ -27,6 +27,8 @@ contract DeployRaffle is Script {
             subscriptionId = createSubscription.createSubscription(vrfCoordinator);
 
             FundSubscription fundSubscription = new FundSubscription();
+
+            fundSubscription.fundSubscription(vrfCoordinator, subscriptionId, link);
         }
 
         vm.startBroadcast();
@@ -39,7 +41,8 @@ contract DeployRaffle is Script {
             callbackGasLimit
         );
         vm.stopBroadcast();
-
+        AddConsumer addConsumer = new AddConsumer();
+        addConsumer.addConsumer(address(raffle), vrfCoordinator, subscriptionId);
         return (raffle, helperConfig);
     }
 }
