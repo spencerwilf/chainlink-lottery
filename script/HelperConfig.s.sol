@@ -5,12 +5,11 @@ import {Script} from "forge-std/Script.sol";
 import {VRFCoordinatorV2Mock} from "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
 
 contract HelperConfig is Script {
-
     struct NetworkConfig {
-        uint entranceFee; 
-        uint interval; 
-        address vrfCoordinator; 
-        bytes32 gasLane; 
+        uint256 entranceFee;
+        uint256 interval;
+        address vrfCoordinator;
+        bytes32 gasLane;
         uint64 subscriptionId;
         uint32 callbackGasLimit;
     }
@@ -25,8 +24,7 @@ contract HelperConfig is Script {
         }
     }
 
-    function getSepoliaEthConfig() public pure returns(NetworkConfig memory) {
-
+    function getSepoliaEthConfig() public pure returns (NetworkConfig memory) {
         return NetworkConfig({
             entranceFee: 0.01 ether,
             interval: 30,
@@ -37,7 +35,7 @@ contract HelperConfig is Script {
         });
     }
 
-    function getOrCreateAnvilEthConfig() public returns(NetworkConfig memory) {
+    function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
         if (activeNetwork.vrfCoordinator != address(0)) {
             return activeNetwork;
         }
@@ -58,5 +56,4 @@ contract HelperConfig is Script {
             callbackGasLimit: 500000
         });
     }
-
 }

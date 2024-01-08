@@ -7,13 +7,12 @@ import {HelperConfig} from "../../script/HelperConfig.s.sol";
 import {Raffle} from "../../src/Raffle.sol";
 
 contract RaffleTest is Test {
-
     event EnteredRaffle(address indexed player);
 
     Raffle raffle;
     HelperConfig helperConfig;
     address public PLAYER = makeAddr("player");
-    uint public constant STARTING_USER_BALANCE = 10 ether;
+    uint256 public constant STARTING_USER_BALANCE = 10 ether;
 
     uint256 entranceFee;
     uint256 interval;
@@ -26,20 +25,18 @@ contract RaffleTest is Test {
         DeployRaffle deployer = new DeployRaffle();
         (raffle, helperConfig) = deployer.run();
 
-        ( entranceFee,
-         interval,
-         vrfCoordinator,
-         gasLane,
-         subscriptionId,
-         callbackGasLimit) = helperConfig.activeNetwork();
-         vm.deal(PLAYER, STARTING_USER_BALANCE);
+        (entranceFee, interval, vrfCoordinator, gasLane, subscriptionId, callbackGasLimit) =
+            helperConfig.activeNetwork();
+        vm.deal(PLAYER, STARTING_USER_BALANCE);
     }
 
     function testRaffleInitializesInOpenState() public view {
         assert(raffle.getRaffleState() == Raffle.RaffleState.OPEN);
     }
 
-    /** Enter raffle tests */
+    /**
+     * Enter raffle tests
+     */
 
     function testRaffleRevertsWhenYouDontPayEnough() public {
         vm.prank(PLAYER);
@@ -71,6 +68,5 @@ contract RaffleTest is Test {
         vm.expectRevert(Raffle.Raffle__RaffleCurrentlyClosed.selector);
         vm.prank(PLAYER);
         raffle.enterRaffle{value: entranceFee}("");
-
     }
 }
