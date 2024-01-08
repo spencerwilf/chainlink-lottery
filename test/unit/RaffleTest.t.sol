@@ -43,4 +43,10 @@ contract RaffleTest is Test {
         vm.expectRevert(Raffle.Raffle__NotEnoughEthSent.selector);
         raffle.enterRaffle("");
     }
+
+    function testRaffleRecordsPlayerWhenTheyEnter() public {
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}("");
+        assertEq(raffle.);
+    }
 }
