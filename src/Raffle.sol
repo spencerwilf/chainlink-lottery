@@ -12,6 +12,9 @@ contract Raffle {
     
     error Raffle__NotEnoughEthSent();
 
+    uint private constant REQUEST_CONFIRMATIONS = 3;
+    uint private constant NUM_WORDS = 1;
+
     uint private immutable i_entranceFee;
     // @dev Duration of lottery in seconds
     
@@ -21,18 +24,26 @@ contract Raffle {
     bytes32 private immutable i_gasLane;
     uint64 private immutable i_subscriptionId;
     uint private immutable i_interval;
+    uint32 private immutable i_callbackGasLimit;
 
 
     /** Events */
     event EnteredRaffle(address indexed player);
 
-    constructor(uint entranceFee, uint interval, address vrfCoordinator, bytes32 gasLane, uint64 subscriptionId) {
+    constructor(uint entranceFee, 
+                uint interval, 
+                address vrfCoordinator, 
+                bytes32 gasLane, 
+                uint64 subscriptionId,
+                uint32 callbackGasLimit
+                ) {
         i_entranceFee = entranceFee;
         i_interval = interval;
         s_lastTimestamp = block.timestamp;
         i_vrfCoordinator = vrfCoordinator;
         i_gasLane = gasLane;
         i_subscriptionId = subscriptionId;
+        i_callbackGasLimit = callbackGasLimit;
     }
 
     function enterRaffle() external payable {
@@ -55,8 +66,10 @@ contract Raffle {
         uint requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
-            
-        )
+            REQUEST_CONFIRMATIONS,
+            i_callbackGasLimit,
+            NUM_WORDS
+        );
     }
 
     /** Getter Functions */
