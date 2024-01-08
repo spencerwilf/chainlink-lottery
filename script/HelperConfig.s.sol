@@ -2,6 +2,7 @@
 pragma solidity 0.8.21;
 
 import {Script} from "forge-std/Script.sol";
+import {VRFCoordinatorV2Mock} from "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
 
 contract HelperConfig is Script {
 
@@ -37,7 +38,9 @@ contract HelperConfig is Script {
     }
 
     function getOrCreateAnvilEthConfig() public returns(NetworkConfig memory) {
-
+        if (activeNetwork.vrfCoordinator != address(0)) {
+            return activeNetwork;
+        }
     }
 
 }
