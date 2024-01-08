@@ -14,6 +14,12 @@ import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2
 contract Raffle is VRFConsumerBaseV2 {
     
     error Raffle__NotEnoughEthSent();
+    error Raffle__RaffleCurrentlyClosed();
+
+    enum RaffleState {
+        OPEN,
+        CALCULATING
+    }
 
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
     uint32 private constant NUM_WORDS = 1;
@@ -29,6 +35,7 @@ contract Raffle is VRFConsumerBaseV2 {
     uint private immutable i_interval;
     uint32 private immutable i_callbackGasLimit;
     address private s_recentWinner;
+    RaffleState private s_raffleState;
 
 
     /** Events */
@@ -48,11 +55,15 @@ contract Raffle is VRFConsumerBaseV2 {
         i_gasLane = gasLane;
         i_subscriptionId = subscriptionId;
         i_callbackGasLimit = callbackGasLimit;
+        s_raffleState = RaffleState.OPEN;
     }
 
     function enterRaffle() external payable {
         if (msg.value < i_entranceFee) {
             revert Raffle__NotEnoughEthSent();
+        }
+        if (s_raffleState != RaffleState.OPEN) {
+            revert Raffle__RaffleCurrentlyClosed();
         }
         s_players.push(payable(msg.sender));
         emit EnteredRaffle(msg.sender);
