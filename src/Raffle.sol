@@ -15,7 +15,7 @@ contract Raffle is VRFConsumerBaseV2 {
     
     error Raffle__NotEnoughEthSent();
     error Raffle__RaffleCurrentlyClosed();
-    error Raffle__UpkeepNotNeeded();
+    error Raffle__UpkeepNotNeeded(uint currentBalance, uint numPlayers, uint raffleState);
 
     enum RaffleState {
         OPEN,
@@ -79,7 +79,11 @@ contract Raffle is VRFConsumerBaseV2 {
         (bool upkeepNeeded,) = checkUpkeep("");
         
         if (!upkeepNeeded) {
-            revert Raffle__UpkeepNotNeeded();
+            revert Raffle__UpkeepNotNeeded(
+                address(this).balance,
+                s_players.length,
+                uint(s_raffleState)
+            );
         }
         //check to see if enough time has passed
         s_raffleState = RaffleState.CALCULATING;
