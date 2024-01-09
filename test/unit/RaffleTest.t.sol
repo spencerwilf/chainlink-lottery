@@ -128,4 +128,17 @@ contract RaffleTest is Test {
         vm.expectRevert(abi.encodeWithSelector(Raffle.Raffle__UpkeepNotNeeded.selector, currentBalance, numPlayers, raffleState));
         raffle.performUpkeep();
     }
+
+    modifier raffleEnteredAndTimePassed() {
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}("");
+        vm.warp(block.timestamp + interval + 1);
+        vm.roll(block.number + 1);
+        _;
+    }
+
+    function testPerformUpkeepUpdatesRaffleStateAndEmitsReqId() public raffleEnteredAndTimePassed {
+        vm.recordLogs();
+
+    }
 }
