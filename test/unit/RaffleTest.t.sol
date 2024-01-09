@@ -158,4 +158,26 @@ contract RaffleTest is Test {
             address(raffle)
         );
     }
+
+    function testFulfillRandomWordsPicksAWinnerResetsAndSendsMoney() public raffleEnteredAndTimePassed {
+        uint additionalEntrants = 5;
+        uint startingIndex = 1;
+        for (uint i = startingIndex; i < startingIndex + additionalEntrants; i++) {
+            address player = address(uint160(i));
+            hoax(player, 1 ether);
+            raffle.enterRaffle{value: entranceFee}("");
+        }
+        vm.recordLogs();
+        raffle.performUpkeep();
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+        bytes32 requestId = entries[1].topics[1];
+
+         VRFCoordinatorV2Mock(vrfCoordinator).fulfillRandomWords(
+            uint(requestId),
+            address(raffle)
+        );
+
+        assert(uint(raffle.getRaffleState()) == 0);
+        assert
+    }
 }
