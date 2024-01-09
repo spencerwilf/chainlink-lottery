@@ -6,6 +6,7 @@ import {DeployRaffle} from "../../script/DeployRaffle.s.sol";
 import {HelperConfig} from "../../script/HelperConfig.s.sol";
 import {Raffle} from "../../src/Raffle.sol";
 import {Vm} from "forge-std/Vm.sol";
+import {VRFCoordinatorV2Mock} from "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
 
 contract RaffleTest is Test {
     event EnteredRaffle(address indexed player);
@@ -148,5 +149,13 @@ contract RaffleTest is Test {
 
         assert(uint(requestId) > 0);
         assert(uint(raffleState) == 1);
+    }
+
+    function testFulfillRandomWordsCanOnlyBeFulfilledAfterPerformUpkeep(uint randomRequestId) public {
+        vm.expectRevert("Nonexistent request");
+        VRFCoordinatorV2Mock(vrfCoordinator).fulfillRandomWords(
+            randomRequestId,
+            address(raffle)
+        );
     }
 }
