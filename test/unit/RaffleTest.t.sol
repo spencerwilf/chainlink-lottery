@@ -178,6 +178,6 @@ contract RaffleTest is Test {
         );
 
         assert(uint(raffle.getRaffleState()) == 0);
-        assert
+        assert(raffle.getRecentWinner() != address(0));
     }
 }
