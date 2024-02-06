@@ -178,7 +178,7 @@ contract RaffleTest is Test {
         uint prevTimestamp = raffle.getLastTimestamp();
 
          VRFCoordinatorV2Mock(vrfCoordinator).fulfillRandomWords(
-            uint(),
+            uint(requestId),
             address(raffle)
         );
 
