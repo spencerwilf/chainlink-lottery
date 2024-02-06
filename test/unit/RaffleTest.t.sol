@@ -165,7 +165,7 @@ contract RaffleTest is Test {
         for (uint i = startingIndex; i < startingIndex + additionalEntrants; i++) {
             address player = address(uint160(i));
             hoax(player, STARTING_USER_BALANCE);
-            raffle.enterRaffle{value: entrancFee}("");
+            raffle.enterRaffle{value: entranceFee}("");
         }
 
         uint prize = entranceFee * (additionalEntrants + 1);
